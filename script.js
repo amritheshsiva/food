@@ -31,7 +31,7 @@ function fetchFirebaseData(donorAddress) {
             var address = childSnapshot.val().address;
 
             // Call distancematrix.ai API to get distance between addresses
-            var apiUrl = 'https://api.distancematrix.ai/maps/api/distancematrix/json?origins=' + encodeURI(donorAddress) + '&destinations=' + encodeURI(address) + '&key=FUFocWgc0wt8XeHKTUMrk49nCTmx26AKQQ9gRKupJ7OOyHnzwiZU7DpM6WVST6uP';
+            var apiUrl = 'https://api.distancematrix.ai/maps/api/distancematrix/json?origins=' + encodeURI(donorAddress) + '&destinations=' + encodeURI(address) + &key='FUFocWgc0wt8XeHKTUMrk49nCTmx26AKQQ9gRKupJ7OOyHnzwiZU7DpM6WVST6uP';
 
             fetch(apiUrl)
             .then(response => response.json())
