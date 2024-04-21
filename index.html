@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Donor Location Map</title>
+    <style>
+        /* Set the size of the map container */
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Input fields for donor details -->
+<label for="name">Name:</label>
+<input type="text" id="name"><br>
+<label for="address">Address:</label>
+<input type="text" id="address"><br>
+<button onclick="compareAddresses()">Find Nearby Donor</button>
+
+<!-- Map container -->
+<div id="map"></div>
+
+<!-- Include the Google Maps JavaScript API with your API key -->
+<script src="https://maps.googleapis.com/maps/api/js?key=FUFocWgc0wt8XeHKTUMrk49nCTmx26AKQQ9gRKupJ7OOyHnzwiZU7DpM6WVST6uP&callback=initMap" async defer></script>
+
+<!-- Include the Firebase JavaScript SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js"></script>
+
+<!-- Include the script.js file -->
+<script src="script.js"></script>
+
+</body>
+</html>
