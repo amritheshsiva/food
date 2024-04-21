@@ -6,8 +6,8 @@ var firebaseConfig = {
     projectId: "foodflow-420911",
     storageBucket: "foodflow-420911.appspot.com",
     messagingSenderId: "525890054881",
-    appId: "1:525890054881:web:4ca8667eda7ef2737265a0",
-    measurementId: "G-DWZB59D1YH"
+    appId: "1:525890054881:web:b85c6a6579b3cb4d7265a0",
+    measurementId: "G-61RELJP128"
 };
 firebase.initializeApp(firebaseConfig);
 
