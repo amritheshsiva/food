@@ -1,4 +1,4 @@
-// Firebase configuration
+// Initialize Firebase (replace with your own configuration)
 var firebaseConfig = {
     apiKey: "AIzaSyC4uXG_kt0odBztUbLtJmpORijmzThl2MM",
     authDomain: "foodflow-420911.firebaseapp.com",
@@ -9,36 +9,39 @@ var firebaseConfig = {
     appId: "1:525890054881:web:4ca8667eda7ef2737265a0",
     measurementId: "G-DWZB59D1YH"
 };
-
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+
+// Reference to the database
 var database = firebase.database();
 
-// Function to compare locations
-function compareLocations() {
-    var donorLocation = document.getElementById('donorLocation').value;
+function checkLocation() {
+  // Get donor location from the form
+  var donorLocation = document.getElementById("donor-location").value;
 
-    // Retrieve registered locations from the database
-    database.ref('registeredLocations').once('value', function(snapshot) {
-        var locations = snapshot.val();
+  // Reference to the registered camps collection
+  var campsRef = database.ref("registeredCamps");
 
-        // Check if any registered location matches the donor's location
-        var foundMatch = false;
-        for (var key in locations) {
-            if (locations[key] === donorLocation) {
-                foundMatch = true;
-                break;
-            }
-        }
+  // Clear previous results
+  document.getElementById("results").innerHTML = "";
 
-        // Display the result based on the match
-        var resultContainer = document.getElementById('result');
-        if (foundMatch) {
-            resultContainer.innerText = "Donation Camps in your location!";
-            // Display both locations if needed
-            // You can implement this part if required
-        } else {
-            resultContainer.innerText = "No Donation Camps in your location.";
-        }
+  campsRef.once("value", function(snapshot) {
+    var found = false;
+    snapshot.forEach(function(childSnapshot) {
+      var campData = childSnapshot.val();
+      if (campData.location === donorLocation) {
+        found = true;
+        // Display matched location results
+        var result = document.createElement("p");
+        result.textContent = "Donation camps available in your location: " + campData.name;
+        document.getElementById("results").appendChild(result);
+      }
     });
+    if (!found) {
+      // Display no camps message
+      var result = document.createElement("p");
+      result.textContent = "No Donation Camps in your location.";
+      document.getElementById("results").appendChild(result);
+    }
+  });
 }
+
