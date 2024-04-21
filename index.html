@@ -1,31 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Donation</title>
-    <style>
-        /* Add your CSS styles here */
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Donation</title>
+  <style>
+    /* Add your CSS styles here */
+  </style>
 </head>
 <body>
-    <h1>Food Donation</h1>
-    <!-- User input tabs for food donation -->
-    <label for="donorLocation">Your Location:</label>
-    <input type="text" id="donorLocation"><br>
-    <!-- Add more input fields for food donation details -->
+  <h1>Food Donation</h1>
 
-    <!-- Button to trigger the comparison -->
-    <button onclick="compareLocations()">Check Donation Camps</button>
+  <label for="address">Your Address:</label>
+  <input type="text" id="address"><br>
 
-    <!-- Container to display the result -->
-    <div id="result"></div>
+  <button onclick="handleOneClick()">Find Closest Donation Camp</button>
 
-    <!-- Include the Firebase JavaScript SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js"></script>
-    <!-- Include your custom JavaScript file -->
-    <script src="script.js"></script>
-</body>
+  <div id="result"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+  <script src="script.js"></script>  </body>
 </html>
-
