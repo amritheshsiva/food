@@ -1,4 +1,4 @@
-// Initialize Firebase
+// Firebase configuration
 var firebaseConfig = {
     apiKey: "AIzaSyC4uXG_kt0odBztUbLtJmpORijmzThl2MM",
     authDomain: "foodflow-420911.firebaseapp.com",
@@ -10,54 +10,96 @@ var firebaseConfig = {
     measurementId: "G-DWZB59D1YH"
 };
 
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
 
-// Function to compare addresses
-function compareAddresses() {
+// Function to handle the one-click action
+function handleOneClick() {
+    // Fetch address from the database
+    fetchDatabaseAddress();
+    
+    // Geocode the donor's address
     var donorAddress = document.getElementById('address').value;
+    geocodeAddress(donorAddress)
+        .then(donorLocation => {
+            // Fetch and compare addresses from the database
+            database.ref('addresses').once('value', function(snapshot) {
+                var closestAddress;
+                var minDistance = Infinity;
 
-    // Fetch addresses from Firebase and compare with donor address
-    fetchFirebaseData(donorAddress);
+                snapshot.forEach(function(childSnapshot) {
+                    var address = childSnapshot.val().address;
+
+                    // Geocode the address from the database
+                    geocodeAddress(address)
+                        .then(databaseLocation => {
+                            // Calculate distance between donor's location and database location
+                            var distance = calculateDistance(donorLocation, databaseLocation);
+
+                            // Update closest address if distance is smaller
+                            if (distance < minDistance) {
+                                minDistance = distance;
+                                closestAddress = address;
+                            }
+
+                            // Display map with closest and donor addresses
+                            if (closestAddress && donorAddress) {
+                                displayMap(donorLocation, databaseLocation);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error geocoding database address:', error);
+                        });
+                });
+            });
+        })
+        .catch(error => {
+            console.error('Error geocoding donor address:', error);
+        });
 }
 
-// Function to fetch addresses from Firebase
-function fetchFirebaseData(donorAddress) {
-    database.ref('addresses').once('value', function(snapshot) {
-        var closestAddress;
-        var minDistance = Infinity;
+// Function to fetch address from the database
+function fetchDatabaseAddress() {
+    // Implement code to fetch address from the database
+}
 
-        snapshot.forEach(function(childSnapshot) {
-            var address = childSnapshot.val().address;
+// Function to geocode an address
+function geocodeAddress(address) {
+    return new Promise((resolve, reject) => {
+        // Construct the geocoding API URL with your API key
+        var apiKey = 'FUFocWgc0wt8XeHKTUMrk49nCTmx26AKQQ9gRKupJ7OOyHnzwiZU7DpM6WVST6uP';
+        var apiUrl = 'https://api.distancematrix.ai/maps/api/distancematrix/json?origins=' + encodeURIComponent(address) + '&key=' + apiKey;
 
-            // Call distancematrix.ai API to get distance between addresses
-            var apiUrl = 'https://api.distancematrix.ai/maps/api/distancematrix/json?origins=' + encodeURI(donorAddress) + '&destinations=' + encodeURI(address) + &key='FUFocWgc0wt8XeHKTUMrk49nCTmx26AKQQ9gRKupJ7OOyHnzwiZU7DpM6WVST6uP';
-
-            fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                var distance = data.rows[0].elements[0].distance.value;
-
-                // Update closest address if distance is smaller
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    closestAddress = address;
+        // Make a GET request to the geocoding API
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Geocoding API request failed');
                 }
-
-                // Display map with closest and donor addresses
-                if (closestAddress && donorAddress) {
-                    displayMap(donorAddress, closestAddress);
+                return response.json();
+            })
+            .then(data => {
+                if (data.rows && data.rows.length > 0 && data.rows[0].elements && data.rows[0].elements.length > 0) {
+                    // Extract the location from the geocoding response
+                    var location = data.rows[0].elements[0].distance;
+                    resolve(location);
+                } else {
+                    throw new Error('No results found');
                 }
             })
             .catch(error => {
-                console.error('Error fetching distance data:', error);
+                reject(error);
             });
-        });
     });
 }
 
+// Function to calculate distance between two locations
+function calculateDistance(location1, location2) {
+    // Implement code to calculate distance between two locations
+}
+
 // Function to display map with donor and closest addresses
-function displayMap(donorAddress, closestAddress) {
-    // This function should handle displaying the map with markers for donor and closest addresses
-    // You can use Google Maps API or any other mapping library to implement this functionality
+function displayMap(donorLocation, databaseLocation) {
+    // Implement code to display the map with markers for donor and closest addresses
 }
